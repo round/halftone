@@ -1,0 +1,93 @@
+<html>
+	<body>
+		<svg X='0' Y='0' WIDTH='1200' height='800' viewbox='0 0 1200 800'>
+			<defs>
+				<circle id='two' cx='3' cy='3' r='0.5'/>
+				<circle id='three' cx='3' cy='3' r='1'/>
+				<circle id='four' cx='3' cy='3' r='1.5'/>
+				<circle id='five' cx='3' cy='3' r='2'/>
+				<circle id='six' cx='3' cy='3' r='2.5'/>
+				<circle id='seven' cx='3' cy='3' r='3'/>
+				<circle id='seven' cx='3' cy='3' r='3.5'/>
+				<circle id='eight' cx='3' cy='3' r='4'/>
+
+				<filter id='half-tone' x='0%' y='0%' width='100%' height='100%' color-interpolation-filters='sRGB'>
+
+				<!-- Generate half-tone screens -->
+				<feImage width='3' height='3' xlink:href='#two'/>
+				<feTile result='2dot'/>
+				<feImage width='3' height='3' xlink:href='#three'/>
+				<feTile result='3dot'/>
+				<feImage width='3' height='3' xlink:href='#four'/>
+				<feTile result='4dot'/>
+				<feImage width='3' height='3' xlink:href='#five'/>
+				<feTile result='5dot'/>
+				<feImage width='3' height='3' xlink:href='#six'/>
+				<feTile result='6dot'/>
+				<feImage width='3' height='3' xlink:href='#seven'/>
+				<feTile result='7dot'/>
+				<feImage width='3' height='3' xlink:href='#eight'/>
+				<feTile result='8dot'/>
+
+				<!-- Generate luminance map -->
+				<feColorMatrix in='SourceGraphic' type='luminanceToAlpha' result='neg-lum-map'/>
+				<feComponentTransfer result='lum-map'>
+					<feFuncA type='table' tableValues='1 0'/>
+				</feComponentTransfer>
+
+				<!-- Split luminance levels into separate images -->
+				<feComponentTransfer in='lum-map' result='2r-thresh'>
+					<feFuncA type='discrete' tableValues='0 1 0 0 0 0 0 0' />
+				</feComponentTransfer>
+				<feComponentTransfer in='lum-map' result='3r-thresh'>
+					<feFuncA type='discrete' tableValues='0 0 1 0 0 0 0 0' />
+				</feComponentTransfer>
+				<feComponentTransfer in='lum-map' result='4r-thresh'>
+					<feFuncA type='discrete' tableValues='0 0 0 1 0 0 0 0' />
+				</feComponentTransfer>
+				<feComponentTransfer in='lum-map' result='5r-thresh'>
+					<feFuncA type='discrete' tableValues='0 0 0 0 1 0 0 0' />
+				</feComponentTransfer>
+				<feComponentTransfer in='lum-map' result='6r-thresh'>
+					<feFuncA type='discrete' tableValues='0 0 0 0 0 1 0 0' />
+				</feComponentTransfer>
+				<feComponentTransfer in='lum-map' result='7r-thresh'>
+					<feFuncA type='discrete' tableValues='0 0 0 0 0 0 1 0' />
+				</feComponentTransfer>
+				<feComponentTransfer in='lum-map' result='8r-thresh'>
+					<feFuncA type='discrete' tableValues='0 0 0 0 0 0 0 1' />
+				</feComponentTransfer>
+
+				<!-- Composite screens with luminance levels -->
+				<feComposite operator='in' in='2r-thresh' in2='2dot' result='lev2'/>
+				<feComposite operator='in' in='3r-thresh' in2='3dot' result='lev3'/>
+				<feComposite operator='in' in='4r-thresh' in2='4dot' result='lev4'/>
+				<feComposite operator='in' in='5r-thresh' in2='5dot' result='lev5'/>
+				<feComposite operator='in' in='6r-thresh' in2='6dot' result='lev6'/>
+				<feComposite operator='in' in='7r-thresh' in2='7dot' result='lev7'/>
+				<feComposite operator='in' in='8r-thresh' in2='8dot' result='lev8'/>
+
+				<!-- Merge half-tone fragments together -->
+				<feMerge>
+					<feMergeNode in='lev8'/>
+					<feMergeNode in='lev7'/>
+					<feMergeNode in='lev6'/>
+					<feMergeNode in='lev5'/>
+					<feMergeNode in='lev4'/>
+					<feMergeNode in='lev3'/>
+					<feMergeNode in='lev2'/>
+				</feMerge>
+
+				<!-- Clip to the original -->
+				<feComposite operator='in' in2='SourceGraphic'/>
+
+				</filter>
+			</defs>
+
+			<image x='0' y='0' width='600' height='800' xlink:href='http://www.npg.si.edu/exhibit/feature/images/schoeller_full.jpg'/>
+
+			<image x='600' y='0' width='600' height='800' filter='url(#half-tone)' xlink:href='http://www.npg.si.edu/exhibit/feature/images/schoeller_full.jpg'/>
+
+		</svg>
+	</body>
+</html>
