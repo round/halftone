@@ -30,6 +30,16 @@
 				<feTile result='8dot'/>
 
 				<!-- Generate luminance map -->
+				<!-- Tweak gamma levels
+				
+				<feComponentTransfer in="neg-lum-map" result="contrast-lum-map">
+					<feFuncA type="gamma" offset="-.1" amplitude="1.1" exponent="2">		
+						<animate attributeName="exponent" values="1.8;2.2;1.8" dur="5s" repeatCount="10" />
+					</feFuncA>
+				</feComponentTransfer>
+				
+				-->
+				
 				<feColorMatrix in='SourceGraphic' type='luminanceToAlpha' result='neg-lum-map'/>
 				<feComponentTransfer result='lum-map'>
 					<feFuncA type='table' tableValues='1 0'/>
